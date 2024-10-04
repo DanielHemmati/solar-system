@@ -7,7 +7,12 @@ on:
     branches:
       - main
       - 'feature/*'
-    
+
+env:
+  MONGO_URI: 'mongodb+srv://my_mongo_user:my_mongo_password@cluster0.v7ozr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+  MONGO_USERNAME: 'my_mongo_user'
+  MONGO_PASSWORD: 'my_mongo_password'
+
 jobs:
     unit-testing:
         name: Unit Testing

@@ -12,7 +12,8 @@ app.use(cors());
 
 mongoose.connect(
   // process.env.MONGO_URI,
- 'mongodb://my_mongo_user:my_mongo_password@mongodb:27017',
+  //  'mongodb://my_mongo_user:my_mongo_password@mongodb:27017',
+  "mongodb+srv://my_mongo_user:my_mongo_password@cluster0.v7ozr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
   {
     // user: process.env.MONGO_USERNAME,
     user: "my_mongo_user",
