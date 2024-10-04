@@ -1,6 +1,7 @@
 name: Solar System Workflow
 
-on: 
+# i will it will get trigger manually or when we push to main branch
+on:
   workflow_dispatch:
   push:
     branches:
@@ -15,17 +16,18 @@ jobs:
         - name: Checkout Repository
           uses: actions/checkout@v4
 
+        # this action will setup the nodejs and npm 
         - name: Setup NodeJS Version
           uses: actions/setup-node@v3
           with:
             node-version: 20
-    
+
         - name: Install Dependencies
           run: npm install
-    
+
         - name: Unit Testing
           run: npm test
-          
+
         - name: Archive Test Result
           uses: actions/upload-artifact@v3
           with:
