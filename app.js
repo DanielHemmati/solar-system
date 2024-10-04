@@ -18,15 +18,6 @@ mongoose.connect(
     // user: process.env.MONGO_USERNAME,
     user: "my_mongo_user",
     pass: "my_mongo_password",
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  },
-  function (err) {
-    if (err) {
-      console.log("error!! " + err);
-    } else {
-      //  console.log("MongoDB Connection Successful")
-    }
   }
 );
 
