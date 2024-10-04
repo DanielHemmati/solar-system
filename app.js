@@ -35,21 +35,9 @@ var planetModel = mongoose.model("planets", dataSchema);
 
 app.post("/planet", function (req, res) {
   // console.log("Received Planet ID " + req.body.id)
-  planetModel.findOne(
-    {
-      id: req.body.id,
-    },
-    function (err, planetData) {
-      if (err) {
-        console.error(
-          "Ooops, We only have 9 planets and a sun. Select a number from 0 - 9"
-        );
-        res.send("Error in Planet Data");
-      } else {
-        res.send(planetData);
-      }
-    }
-  );
+  planetModel.findOne({
+    id: req.body.id,
+  });
 });
 
 app.get("/", async (req, res) => {
