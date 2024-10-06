@@ -6,62 +6,64 @@ on:
   push:
     branches:
       - main
-      - 'feature/*'
+      - "feature/*"
 
 env:
-  MONGO_URI: 'mongodb+srv://my_mongo_user:my_mongo_password@cluster0.v7ozr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-  MONGO_USERNAME: 'my_mongo_user'
-  MONGO_PASSWORD: 'my_mongo_password'
+  MONGO_URI: "mongodb+srv://my_mongo_user:my_mongo_password@cluster0.v7ozr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  MONGO_USERNAME: "my_mongo_user"
+  MONGO_PASSWORD: "my_mongo_password"
 
 jobs:
-    unit-testing:
-        name: Unit Testing
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v4
+  unit-testing:
+    name: Unit Testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-        # this action will setup the nodejs and npm 
-        - name: Setup NodeJS Version
-          uses: actions/setup-node@v4
-          with:
-            node-version: 20
+      # this action will setup the nodejs and npm
+      - name: Setup NodeJS Version
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-        - name: Install Dependencies
-          run: npm install
+      - name: Install Dependencies
+        run: npm install
 
-        - name: Unit Testing
-          run: npm test
+      - name: Unit Testing
+        id: nodejs-unit-testing-step
+        run: npm test
 
-        - name: Archive Test Result
-          uses: actions/upload-artifact@v3
-          with:
-            name: Mocha-Test-Result
-            path: test-results.xml
+      - name: Archive Test Result
+        uses: actions/upload-artifact@v3
+        if: steps.nodejs-unit-testing-step.outcome == 'failure' || steps.nodejs-unit-testing-step == 'success'
+        with:
+          name: Mocha-Test-Result
+          path: test-results.xml
 
-    code-coverage:
-      name: Code Coverage
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v4
+  code-coverage:
+    name: Code Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-        - name: Setup NodeJS Version
-          uses: actions/setup-node@v4
-          with:
-            node-version: 20
+      - name: Setup NodeJS Version
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-        - name: Install Dependencies
-          run: npm install
+      - name: Install Dependencies
+        run: npm install
 
-        - name: check code coverage
-          # it doesn't matter if it fails continue
-          continue-on-error: true
-          run: npm run coverage
+      - name: check code coverage
+        # it doesn't matter if it fails continue
+        continue-on-error: true
+        run: npm run coverage
 
-        - name: Archive Test Result
-          uses: actions/upload-artifact@v3
-          with:
-            name: Code-Coverage-Result
-            path: coverage
-            retention-days: 5
+      - name: Archive Test Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: Code-Coverage-Result
+          path: coverage
+          retention-days: 5
