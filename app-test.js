@@ -11,7 +11,6 @@ chai.use(chaiHttp);
 describe("Planets API Suite", () => {
   describe("just do a simple console.log", () => {
     console.log("first test");
-    process.exit(1);
   })
   // describe("Fetching Planet Details", () => {
   //   it("it should fetch a planet named Mercury", (done) => {
