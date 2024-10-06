@@ -36,7 +36,8 @@ jobs:
 
       - name: Archive Test Result
         uses: actions/upload-artifact@v3
-        if: steps.nodejs-unit-testing-step.outcome == 'failure' || steps.nodejs-unit-testing-step == 'success'
+        # we only want the archive if the last step failed, not always
+        if: failure()
         with:
           name: Mocha-Test-Result
           path: test-results.xml
