@@ -106,11 +106,6 @@ jobs:
       # i rather to do this on my own machine
       - name: Docker image testing
         run: |
-          docker images
-          echo ${{ env.MONGO_URI }}
-          echo ${{ env.MONGO_USERNAME }}
-          echo ${{ secrets.MONGO_PASSWORD }}
-
           docker run --name solar-system-app -d \
             -p 3000:3000 \
             -e MONGO_URI=${{ env.MONGO_URI }} \
