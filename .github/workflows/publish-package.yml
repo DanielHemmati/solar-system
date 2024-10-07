@@ -1,4 +1,4 @@
-name: Publish Package to gitub npm registry
+name: Publish Package to gitub npm registry2
 
 on:
   release:
