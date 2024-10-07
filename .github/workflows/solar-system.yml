@@ -88,7 +88,8 @@ jobs:
     name: Containerizaition
     needs: [unit-testing, code-coverage]
     permissions:
-      contents: write
+      # this should not be necessary. i hae 
+      contents: read
       packages: write
     steps:
       - name: Checkout Repository
