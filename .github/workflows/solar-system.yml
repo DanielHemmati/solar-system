@@ -88,9 +88,9 @@ jobs:
     name: Containerizaition
     needs: [unit-testing, code-coverage]
     permissions:
-      # this should not be necessary. i hae 
+      # contents is by default is to read
       contents: read
-      packages: write
+      packages: write # this is necessary
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
