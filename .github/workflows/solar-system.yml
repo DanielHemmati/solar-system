@@ -181,8 +181,38 @@ jobs:
         with:
           version: "v1.26.0" # default is latest stable
 
+      - name: Set up kubeconfig file
+        uses: azure/k8s-set-context@v4
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+          context: learning
+
       - name: Fetch k8s cluster details
         run: |
           kubectl version
           echo -----------------------
           kubectl get nodes
+
+      # this won't work b/c i don't when he even used the nginx ingress controller
+      - name: Save nginx ingress controller ip as a gihtub env value
+        if: false
+        run: |
+          echo "INGERSS_IP=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o jsonpath="{.status.loadBalancer.ingress[0].ip}")" >> $GITHUB_ENV
+
+      - name: Repalce token in manifest files
+        uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: "_{_"
+          tokenSuffix: "_}_"
+          files: '["./kubernetes/*.yaml"]'
+        env:
+          NAMESPACE: ${{ vars.NAMESPACE }}
+          REPLICAS: ${{ vars.REPLICAS }}
+          IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+          # INGERSS_IP: ${{ env.INGERSS_IP }} we are not using ingress
+
+      # check if all the value are actually replace
+      - name: Check files
+        run: |
+          cat kubernetes/development/*.yaml
