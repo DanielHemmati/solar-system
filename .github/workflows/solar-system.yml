@@ -216,7 +216,7 @@ jobs:
         run: |
           cat kubernetes/development/*.yaml
 
-      - name: Run development file with
+      - name: Run development file with for second time
         run: |
           kubectl apply -f kubernetes/development
           echo $INGERSS_IP
