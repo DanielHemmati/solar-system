@@ -183,6 +183,6 @@ jobs:
 
       - name: Fetch k8s cluster details
         run: |
-          kubectl version --short
+          kubectl version
           echo -----------------------
           kubectl get nodes
