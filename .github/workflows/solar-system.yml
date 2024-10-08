@@ -196,9 +196,8 @@ jobs:
 
       # this won't work b/c i don't when he even used the nginx ingress controller
       - name: Save nginx ingress controller ip as a gihtub env value
-        if: false
         run: |
-          echo "INGERSS_IP=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o jsonpath="{.status.loadBalancer.ingress[0].ip}")" >> $GITHUB_ENV
+          echo "INGERSS_IP=$(kubectl get svc test-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_ENV
 
       - name: Repalce token in manifest files
         uses: cschleiden/replace-tokens@v1
@@ -209,10 +208,15 @@ jobs:
         env:
           NAMESPACE: ${{ vars.NAMESPACE }}
           REPLICAS: ${{ vars.REPLICAS }}
-          IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+          IMAGE: nginx
           # INGERSS_IP: ${{ env.INGERSS_IP }} we are not using ingress
 
       # check if all the value are actually replace
       - name: Check files
         run: |
           cat kubernetes/development/*.yaml
+
+      - name: Run development file with
+        run: |
+          kubectl apply -f kubernetes/development
+          echo $INGERSS_IP

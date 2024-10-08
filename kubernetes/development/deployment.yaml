@@ -20,10 +20,10 @@ spec:
       - image: _{_IMAGE_}_
         imagePullPolicy: Always
         name: solar-system
-        ports:
-        - containerPort: 3000
-          name: http
-          protocol: TCP
-        envFrom:
-        - secretRef:
-            name: mongo-db-creds
+        # ports:
+        # - containerPort: 3000
+        #   name: http
+        #   protocol: TCP
+        # envFrom:
+        # - secretRef:
+        #     name: mongo-db-creds
