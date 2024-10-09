@@ -220,7 +220,12 @@ jobs:
 
       - name: Run development file with for second time
         run: |
-          kubectl create ns gh-action
+          if kubectl get ns gh-action > /dev/null 2>&1; then
+            echo "namespace gh-action already exist"
+          else
+            echo "namespace gh-action doesn't exist. Creating it now ..."
+            kubectl create ns gh-action
+          fi
           kubectl apply -f kubernetes/development
           echo $INGERSS_IP
 
