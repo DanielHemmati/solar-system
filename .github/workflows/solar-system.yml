@@ -220,6 +220,7 @@ jobs:
 
       - name: Run development file with for second time
         run: |
+          kubectl create ns gh-action
           kubectl apply -f kubernetes/development
           echo $INGERSS_IP
 
