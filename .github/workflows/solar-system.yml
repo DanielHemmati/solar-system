@@ -169,21 +169,21 @@ jobs:
             ghcr.io/${{ env.creator }}/solar-systme:${{ github.sha }}
 
   dev-deploy:
-    if: contains(github.ref, 'feature/ ')
+    # if: contains(github.ref, 'feature/ ')
     needs: docker
     uses: ./.github/workflows/reusable-deployment.yml
     secrets:
       k8s-kubeconfig: ${{ secrets.KUBECONFIG }}
 
 
-  # integration-testing:
-  #   runs-on: ubuntu-latest
-  #   needs: dev-deploy
-  #   if: contains(github.ref, 'feature/')
+  integration-testing:
+    runs-on: ubuntu-latest
+    needs: dev-deploy
+    if: contains(github.ref, 'feature/')
 
-  #   steps:
-  #     - name: Test Url output using curl
-  #       env:
-  #         IP: ${{ needs.dev-deploy.outputs.LB_IP }}
-  #       run: |
-  #         curl -s http://$IP | grep nginx
+    steps:
+      - name: Test Url output using curl
+        env:
+          IP: ${{ needs.dev-deploy.outputs.application-url }}
+        run: |
+          curl -s http://$IP | grep nginx
