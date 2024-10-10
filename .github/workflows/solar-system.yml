@@ -39,15 +39,19 @@ jobs:
         with:
           node-version: 20
 
-      - name: Cache NPM deps
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          # this is so cool
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+      # - name: Cache NPM deps
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: node_modules
+      #     # this is so cool
+      #     key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
 
-      - name: Install Dependencies
-        run: npm install
+      # - name: Install Dependencies
+      #   run: npm install
+      - name: composite action - cache & install npm packages
+        uses: ./.github/workflows/custom-actions/npm-actions
+        with:
+          path-to-folder: node_modules
 
       - name: Unit Testing
         id: nodejs-unit-testing-step

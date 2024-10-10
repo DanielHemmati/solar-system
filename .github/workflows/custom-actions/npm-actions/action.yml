@@ -1,0 +1,21 @@
+name: 'Npm custom actions'
+description: 'Installing and caching NPM packages'
+
+inputs:
+  path-to-folder:
+    description: ""
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache NPM deps
+      uses: actions/cache@v4
+      with:
+        path: ${{ inputs.path-to-folder }}
+        # this is so cool
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+
+    - name: Install Dependencies
+      run: npm install
+      shell: bash # u have to write it for custom actions
