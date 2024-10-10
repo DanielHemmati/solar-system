@@ -11,8 +11,8 @@ on:
 jobs:
   reuse-deploy:
     runs-on: ubuntu-latest
-    outputs:
-      LB_IP: ${{ steps.solar-system-svc-ip.outputs.SVC_IP }}
+    # outputs:
+    #   LB_IP: ${{ steps.solar-system-svc-ip.outputs.SVC_IP }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -36,10 +36,10 @@ jobs:
           kubectl get nodes
 
       # this won't work b/c i don't when he even used the nginx ingress controller
-      - name: Save nginx ingress controller ip as a gihtub env value
-        id: solar-system-svc-ip
-        run: |
-          echo "SVC_IP=$(kubectl get svc -n gh-action solar-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_OUTPUT
+      # - name: Save nginx ingress controller ip as a gihtub env value
+      #   id: solar-system-svc-ip
+      #   run: |
+      #     echo "SVC_IP=$(kubectl get svc -n gh-action solar-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_OUTPUT
 
       - name: Repalce token in manifest files
         uses: cschleiden/replace-tokens@v1
@@ -67,4 +67,4 @@ jobs:
             kubectl create ns gh-action
           fi
           kubectl apply -f kubernetes/development
-          echo $INGERSS_IP
+          kubectl get svc -n gh-action solar-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
