@@ -169,7 +169,7 @@ jobs:
             ghcr.io/${{ env.creator }}/solar-systme:${{ github.sha }}
 
   dev-deploy:
-    # if: contains(github.ref, 'feature/ ')
+    if: contains(github.ref, 'feature/ ')
     needs: docker
     uses: ./.github/workflows/reusable-deployment.yml
     secrets:
