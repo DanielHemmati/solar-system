@@ -171,7 +171,7 @@ jobs:
   dev-deploy:
     if: contains(github.ref, 'feature/ ')
     needs: docker
-    uses: .github/workflows/reusable-deployment.yml
+    uses: ./.github/workflows/reusable-deployment.yml
 
   integration-testing:
     runs-on: ubuntu-latest
