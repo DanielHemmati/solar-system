@@ -169,72 +169,17 @@ jobs:
             ghcr.io/${{ env.creator }}/solar-systme:${{ github.sha }}
 
   dev-deploy:
-    runs-on: ubuntu-latest
+    if: contains(github.ref, 'feature/ ')
     needs: docker
-    outputs:
-      LB_IP: ${{ steps.solar-system-svc-ip.outputs.SVC_IP }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Install kubectl CLI
-        uses: azure/setup-kubectl@v4
-        with:
-          version: "v1.26.0" # default is latest stable
-
-      - name: Set up kubeconfig file
-        uses: azure/k8s-set-context@v4
-        with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBECONFIG }}
-          context: learning
-
-      - name: Fetch k8s cluster details
-        run: |
-          kubectl version
-          echo -----------------------
-          kubectl get nodes
-
-      # this won't work b/c i don't when he even used the nginx ingress controller
-      - name: Save nginx ingress controller ip as a gihtub env value
-        id: solar-system-svc-ip
-        run: |
-          echo "SVC_IP=$(kubectl get svc -n gh-action solar-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_OUTPUT
-
-      - name: Repalce token in manifest files
-        uses: cschleiden/replace-tokens@v1
-        with:
-          tokenPrefix: "_{_"
-          tokenSuffix: "_}_"
-          files: '["./kubernetes/development/*.yaml"]'
-        env:
-          NAMESPACE: ${{ vars.NAMESPACE }}
-          REPLICAS: ${{ vars.REPLICAS }}
-          IMAGE: nginx
-          # INGERSS_IP: ${{ env.INGERSS_IP }} we are not using ingress
-
-      # check if all the value are actually replace
-      - name: Check files
-        run: |
-          cat kubernetes/development/*.yaml
-
-      - name: Run development file with for second time
-        run: |
-          if kubectl get ns gh-action > /dev/null 2>&1; then
-            echo "namespace gh-action already exist"
-          else
-            echo "namespace gh-action doesn't exist. Creating it now ..."
-            kubectl create ns gh-action
-          fi
-          kubectl apply -f kubernetes/development
-          echo $INGERSS_IP
+    uses: .github/workflows/reusable-deployment.yml
 
   integration-testing:
     runs-on: ubuntu-latest
     needs: dev-deploy
+    if: contains(github.ref, 'feature/')
 
     steps:
-      - name: Test Url output using curl 
+      - name: Test Url output using curl
         env:
           IP: ${{ needs.dev-deploy.outputs.LB_IP }}
         run: |
