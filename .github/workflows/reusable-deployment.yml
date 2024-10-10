@@ -15,7 +15,8 @@ jobs:
     #   LB_IP: ${{ steps.solar-system-svc-ip.outputs.SVC_IP }}
     steps:
       - name: run something
-        run: echo ${{github.ref}}
+        run: echo ${{contains(github.ref, 'feature/')}}
+        continue-on-error: true
       - name: Checkout Repository
         uses: actions/checkout@v4
 
