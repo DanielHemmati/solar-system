@@ -2,6 +2,11 @@ name: Deployment - reusable workflow
 
 on:
   workflow_call:
+    secrets:
+      k8s-kubeconfig:
+        required: true
+      # mongodb-password:
+      #   required: true
 
 jobs:
   reuse-deploy:
@@ -21,7 +26,7 @@ jobs:
         uses: azure/k8s-set-context@v4
         with:
           method: kubeconfig
-          kubeconfig: ${{ secrets.KUBECONFIG }}
+          kubeconfig: ${{ secrets.k8s-kubeconfig }}
           context: learning
 
       - name: Fetch k8s cluster details
